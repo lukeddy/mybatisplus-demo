@@ -1,6 +1,10 @@
 package com.luke.mybatisplus;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.luke.mybatisplus.mapper.UserMapper;
 import com.luke.mybatisplus.pojo.User;
 import org.junit.jupiter.api.Test;
@@ -113,6 +117,83 @@ public class MyBatisPlusWrapperTest {
         queryWrapper1.inSql("id","SELECT id FROM user WHERE id < 100");
         List<User> userList=userMapper.selectList(queryWrapper1);
         userList.forEach(System.out::println);
+    }
 
+    /**
+     * 条件查询
+     */
+    @Test
+    public void testQueryWrapper8(){
+        String name="Wang";
+        Integer ageBegin=null;
+        Integer ageEnd=100;
+        QueryWrapper<User> queryWrapper=new QueryWrapper();
+        if(StringUtils.isNotBlank(name)){
+            queryWrapper.like("name",name);
+        }
+        if(null!=ageBegin){
+            queryWrapper.ge("age",ageBegin);
+        }
+        if(null!=ageEnd){
+            queryWrapper.le("age",ageEnd);
+        }
+        List<User> userList=userMapper.selectList(queryWrapper);
+        userList.forEach(System.out::println);
+    }
+
+    @Test
+    public void testUpdateWrapper(){
+        UpdateWrapper<User> updateWrapper=new UpdateWrapper();
+        updateWrapper.like("name","李")
+                .and(i->i.gt("age",20).or().isNull("email"));
+        updateWrapper.set("name","王五")
+                .set("email","wangwu111@gmail.com");
+
+        int result=userMapper.update(null,updateWrapper);
+        System.out.println(result);
+    }
+
+    /**
+     * 等价testQueryWrapper8
+     */
+    @Test
+    public void testQueryWrapper9(){
+        String name="Wang";
+        Integer ageBegin=null;
+        Integer ageEnd=100;
+        QueryWrapper<User> queryWrapper=new QueryWrapper();
+        queryWrapper.like(StringUtils.isNotBlank(name),"name",name)
+                .ge(null!=ageBegin,"age",ageBegin)
+                .le(null!=ageEnd,"age",ageEnd);
+        List<User> userList=userMapper.selectList(queryWrapper);
+        userList.forEach(System.out::println);
+    }
+
+    /**
+     * 等价testQueryWrapper9
+     */
+    @Test
+    public void testLambdaQueryWrapper(){
+        String name="Wang";
+        Integer ageBegin=null;
+        Integer ageEnd=100;
+        LambdaQueryWrapper<User> lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(StringUtils.isNotBlank(name),User::getName,name)
+                .ge(null!=ageBegin,User::getAge,ageBegin)
+                .le(null!=ageEnd,User::getAge,ageEnd);
+        List<User> userList=userMapper.selectList(lambdaQueryWrapper);
+        userList.forEach(System.out::println);
+    }
+
+    @Test
+    public void testLambdaUpdateWrapper(){
+        LambdaUpdateWrapper<User> lambdaUpdateWrapper=new LambdaUpdateWrapper();
+        lambdaUpdateWrapper.like(User::getName,"王")
+                .and(i->i.gt(User::getAge,21).or().isNull(User::getEmail));
+        lambdaUpdateWrapper.set(User::getName,"路西")
+                .set(User::getEmail,"luxi@gmail.com");
+
+        int result=userMapper.update(null,lambdaUpdateWrapper);
+        System.out.println(result);
     }
 }
