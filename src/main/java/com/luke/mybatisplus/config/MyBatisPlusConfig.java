@@ -3,6 +3,7 @@ package com.luke.mybatisplus.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,8 @@ public class MyBatisPlusConfig {
         List<InnerInterceptor> list=new ArrayList<>();
         //添加MySQL分页插件
         list.add(new PaginationInnerInterceptor(DbType.MYSQL));
+        //添加乐观锁插件
+        list.add(new OptimisticLockerInnerInterceptor());
 
         mybatisPlusInterceptor.setInterceptors(list);
         return mybatisPlusInterceptor;
