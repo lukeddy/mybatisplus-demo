@@ -6,4 +6,8 @@
       select id,name,age,email from user where id=#{id}
     </select>
 
+    <select id="selectByCustomizePage" resultType="User">
+        select id,name,age,email from user where age > #{age}
+    </select>
+
 </mapper>

@@ -39,4 +39,19 @@ public class MyBatisPlusPluginTest {
         System.out.println(page.hasPrevious());
         page.getRecords().forEach(System.out::println);
     }
+
+    /**
+     * 测试自定义条件分页
+     */
+    @Test
+    public void testPaginationByCustomizeMethod(){
+        Page<User> page=new Page<>(1,3);
+        userMapper.selectByCustomizePage(page,24);
+        System.out.println(page.getPages());
+        System.out.println(page.getTotal());
+        System.out.println(page.hasNext());
+        System.out.println(page.hasPrevious());
+        page.getRecords().forEach(System.out::println);
+
+    }
 }

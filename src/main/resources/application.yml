@@ -9,3 +9,5 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #配置全局类型别名
+  type-aliases-package: com.luke.mybatisplus.pojo
