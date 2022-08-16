@@ -1,5 +1,6 @@
 package com.luke.mybatisplus;
 
+import com.luke.mybatisplus.enums.SexEnum;
 import com.luke.mybatisplus.mapper.UserMapper;
 import com.luke.mybatisplus.pojo.User;
 import org.junit.jupiter.api.Test;
@@ -27,9 +28,10 @@ public class MyBatisTest {
     @Test
     public void testInsert(){
         User user=new User();
-        user.setName("zhangsan");
-        user.setEmail("zhangsan@qq.com");
-        user.setAge(20);
+        user.setName("lucy");
+        user.setEmail("luch@qq.com");
+        user.setAge(100);
+        user.setSex(SexEnum.MALE);
         int result= userMapper.insert(user);
         Assert.isTrue(result>0,"插入失败");
         //查看雪花算法生成的ID
