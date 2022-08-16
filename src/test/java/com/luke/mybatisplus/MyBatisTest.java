@@ -65,4 +65,10 @@ public class MyBatisTest {
     }
 
 
+    @Test
+    public void testCustomizeMethod(){
+       Map<String,Object> map=userMapper.selectMapById(1l);
+        System.out.println(map);
+    }
+
 }
