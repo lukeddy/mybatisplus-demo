@@ -19,4 +19,10 @@
         resource_type,url,code,
         sort
     </sql>
+    <select id="listResource" resultType="com.luke.mybatisplus.vo.ResourceVo">
+        select re.resource_id,re.resource_name,re.url
+        from resource re inner join role_resource rr
+        on re.resource_id=rr.resource_id
+        ${ew.customSqlSegment}
+    </select>
 </mapper>
