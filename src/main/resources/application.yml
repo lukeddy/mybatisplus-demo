@@ -1,3 +1,9 @@
+#服务器配置
+server:
+  port: 8088
+  servlet:
+    context-path: /demo
+
 spring:
   #配置网页
   thymeleaf:
@@ -20,3 +26,9 @@ mybatis-plus:
   type-aliases-package: com.luke.mybatisplus.pojo
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#日志配置
+logging:
+  level:
+    com.luke.mybatisplus.mapper: trace
+
