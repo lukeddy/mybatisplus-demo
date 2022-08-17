@@ -34,7 +34,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account>
           return loginDTO;
       }
 
-      loginDTO.setPath("dashboard");
+      loginDTO.setPath("redirect:/dashboard");
       loginDTO.setAccount(account);
       return loginDTO;
     }
