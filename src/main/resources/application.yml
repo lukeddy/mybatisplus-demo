@@ -1,4 +1,8 @@
 spring:
+  #配置网页
+  thymeleaf:
+    cache: false
+
   #配置数据源信息
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -6,8 +10,13 @@ spring:
     url: jdbc:mysql://localhost:3306/mybatis_plus?characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
+
 mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+    #配置全局类型别名
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.luke.mybatisplus.pojo
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    #配置全局类型别名
-  type-aliases-package: com.luke.mybatisplus.pojo
