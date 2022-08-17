@@ -1,5 +1,6 @@
 package com.luke.mybatisplus.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 
@@ -14,5 +15,10 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequestMapping("/role")
 public class RoleController {
+
+    @GetMapping("/toList")
+    public String toList(){
+        return "admin/role/roleList";
+    }
 
 }

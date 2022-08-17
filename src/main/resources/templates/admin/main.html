@@ -33,7 +33,7 @@
 					<li class="layui-nav-item layui-nav-itemed" th:each="resource:${session.resourceVoList}">
 					  <a class="" href="javascript:;" th:text="${resource.resourceName}">所有商品</a>
 					  <dl class="layui-nav-child" th:if="${resource.subs} ne null" th:each="sub:${resource.subs}">
-						<dd><a th:href="'javascript:showTab(\''+${sub.url}+'\',\''+${sub.resourceName}+'\','+${sub.resourceId}+')'" th:text="${sub.resourceName}">列表一</a></dd>
+						<dd><a th:attr="data-url=@{/}" th:href="'javascript:showTab(\''+${sub.url}+'\',\''+${sub.resourceName}+'\','+${sub.resourceId}+')'" th:text="${sub.resourceName}">列表一</a></dd>
 					  </dl>
 					</li>
 <!--					<li class="layui-nav-item">-->
@@ -69,6 +69,10 @@
 	</div>
 	<script th:src="@{/webjars/layui/layui.all.js}"></script>
 	<script th:src="@{/webjars/jquery/jquery.js}"></script>
+	<script th:inline="javascript">
+		let baseURL= [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+		console.log(baseURL);
+	</script>
 	<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
