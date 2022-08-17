@@ -17,12 +17,9 @@ public class MyBatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
         MybatisPlusInterceptor mybatisPlusInterceptor=new MybatisPlusInterceptor();
-
         List<InnerInterceptor> list=new ArrayList<>();
         //添加MySQL分页插件
         list.add(new PaginationInnerInterceptor(DbType.MYSQL));
-        //添加乐观锁插件
-        list.add(new OptimisticLockerInnerInterceptor());
 
         mybatisPlusInterceptor.setInterceptors(list);
         return mybatisPlusInterceptor;

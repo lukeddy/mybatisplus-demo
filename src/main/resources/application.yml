@@ -13,7 +13,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mybatis_plus?characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/demo_authdb?characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
 
@@ -23,7 +23,7 @@ mybatis-plus:
       id-type: auto
     #配置全局类型别名
   mapper-locations: classpath:mapper/*Mapper.xml
-  type-aliases-package: com.luke.mybatisplus.pojo
+  type-aliases-package: com.luke.mybatisplus.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
