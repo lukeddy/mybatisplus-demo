@@ -1,5 +1,6 @@
 package com.luke.mybatisplus.service;
 
+import com.luke.mybatisplus.dto.LoginDTO;
 import com.luke.mybatisplus.entity.Account;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -9,5 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-08-17 16:55:23
 */
 public interface AccountService extends IService<Account> {
-
+   LoginDTO login(String username, String password);
 }
