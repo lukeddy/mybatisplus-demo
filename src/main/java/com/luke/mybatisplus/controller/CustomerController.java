@@ -80,4 +80,14 @@ public class CustomerController {
         }
         return ResponseData.failed("更新失败");
     }
+
+    @DeleteMapping("/doDelete/{id}")
+    @ResponseBody
+    public ResponseData<Object> doDelete(@PathVariable Long id){
+        boolean delResult=customerService.removeById(id);
+        if(delResult){
+            return ResponseData.ok(null);
+        }
+        return ResponseData.failed("删除失败");
+    }
 }
