@@ -1,8 +1,9 @@
+let tableIns;
 layui.use('table', function(){
     let table = layui.table;
 
     //第一个实例
-    table.render({
+   tableIns=  table.render({
         elem: '#customerList'
         ,height: 360
         ,url: baseURL+'/customer/list' //数据接口
@@ -25,3 +26,19 @@ layui.use('table', function(){
         ]]
     });
 });
+
+/**
+ * 查询按钮事件
+ */
+function query(){
+    tableIns.reload({
+        where:{
+            realName:$("#realName").val(),
+            phone:$("#phone").val()
+        },
+        page: {
+            curr:1
+        }
+    })
+}
+

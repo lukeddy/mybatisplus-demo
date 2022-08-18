@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luke.mybatisplus.entity.Customer;
 import com.luke.mybatisplus.service.CustomerService;
+import com.luke.mybatisplus.utils.ResponseUtils;
 import com.luke.mybatisplus.vo.ResponseData;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,10 +47,6 @@ public class CustomerController {
                 .orderByDesc(Customer::getCustomerId);
         Page<Customer> myPage= customerService.page(new Page<>(page,limit),query);
 
-        Map<String,Object> map=new HashMap<>();
-        map.put("count",myPage.getTotal());
-        map.put("records",myPage.getRecords());
-
-        return  ResponseData.ok(map);
+        return ResponseUtils.buildSuccessResponseResult(myPage);
     }
 }
