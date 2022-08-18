@@ -36,7 +36,7 @@ layui.use('table', function(){
 
 
         if(layEvent === 'detail'){ //查看
-            //do somehing
+            openLayer(baseURL+'/customer/toDetail/'+customerId,'客户详情');
         } else if(layEvent === 'del'){ //删除
             layer.confirm('真的删除行么', function(index){
                 //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存

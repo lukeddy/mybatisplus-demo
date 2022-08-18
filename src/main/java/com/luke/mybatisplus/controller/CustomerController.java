@@ -64,6 +64,13 @@ public class CustomerController {
         return ResponseData.failed("新增客户信息失败");
     }
 
+    @GetMapping("/toDetail/{id}")
+    public String toDetail(@PathVariable Long id, Model model){
+        Customer customer=customerService.getById(id);
+        model.addAttribute("customer",customer);
+        return "/admin/customer/customerDetail";
+    }
+
     @GetMapping("/toUpdate/{id}")
     public String toUpdate(@PathVariable Long id, Model model){
         Customer customer=customerService.getById(id);
