@@ -43,33 +43,43 @@ function query(){
 }
 
 function toAddPage(){
-    $.get(baseURL+'/customer/toAdd',function (res){
+    openLayer(baseURL+'/customer/toAdd','新增客户');
+    submitData('addSubmit','post');
+}
+
+function openLayer(url,title){
+    $.ajaxSettings.async=false;
+    $.get(url,function (pageContent) {
         layui.layer.open({
-            type:1,
-            title:"新增客户",
-            area:['800px','450px'],
-            content:res
+            type: 1,
+            title: title,
+            area: ['800px', '450px'],
+            content: pageContent
         });
-        layui.form.render();
-        layui.form.on('submit(addSubmit)',function (data){
-            console.log(data);
-            $.ajax({
-                url: data.form.action,
-                async:false,
-                type:"post",
-                contentType:"application/json;charset=utf-8",
-                data:JSON.stringify(data.field),
-                success:function (res){
-                    if(res.code==0){
-                        layui.layer.closeAll();
-                        query();
-                    }else {
-                        layui.layer.alert(res.msg);
-                    }
+    });
+    $.ajaxSettings.async=true;
+}
+
+function submitData(filterName,requestType){
+    layui.form.render();
+    layui.form.on('submit('+filterName+')',function (data){
+        console.log(data);
+        $.ajax({
+            url: data.form.action,
+            async:false,
+            type:requestType,
+            contentType:"application/json;charset=utf-8",
+            data:JSON.stringify(data.field),
+            success:function (res){
+                if(res.code==0){
+                    layui.layer.closeAll();
+                    query();
+                }else {
+                    layui.layer.alert(res.msg);
                 }
-            });
-            //阻止表单提交
-            return false;
+            }
         });
-    })
+        //阻止表单提交
+        return false;
+    });
 }
