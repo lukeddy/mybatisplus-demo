@@ -29,7 +29,7 @@ public class LoginController {
         String error=loginDTO.getError();
         if(error==null){
             Account account=loginDTO.getAccount();
-            session.setAttribute("username",account.getUsername());
+            session.setAttribute("account",account);
             session.setAttribute("resourceVoList",resourceService.getResourceByRoleId(account.getRoleId()));
         }else{
             redirectAttributes.addFlashAttribute("error",error);

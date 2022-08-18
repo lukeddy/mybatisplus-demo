@@ -66,15 +66,19 @@ function query(){
     })
 }
 
+/**
+ * 跳转到新增页面
+ */
 function toAddPage(){
     openLayer(baseURL+'/customer/toAdd','新增客户');
     submitData('addSubmit','post');
 }
 
-function toUpdatePage(customerId){
-
-}
-
+/**
+ * 打开弹出成层封装
+ * @param url
+ * @param title
+ */
 function openLayer(url,title){
     $.ajaxSettings.async=false;
     $.get(url,function (pageContent) {
@@ -88,6 +92,11 @@ function openLayer(url,title){
     $.ajaxSettings.async=true;
 }
 
+/**
+ * 处理表单提交封装
+ * @param filterName
+ * @param requestType
+ */
 function submitData(filterName,requestType){
     layui.form.render();
     layui.form.on('submit('+filterName+')',function (data){
