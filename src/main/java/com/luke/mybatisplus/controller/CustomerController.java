@@ -10,6 +10,7 @@ import com.luke.mybatisplus.vo.ResponseData;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
@@ -61,5 +62,22 @@ public class CustomerController {
             return ResponseData.ok(null);
         }
         return ResponseData.failed("新增客户信息失败");
+    }
+
+    @GetMapping("/toUpdate/{id}")
+    public String toUpdate(@PathVariable Long id, Model model){
+        Customer customer=customerService.getById(id);
+        model.addAttribute("customer",customer);
+        return "/admin/customer/customerUpdate";
+    }
+
+    @PostMapping("/doUpdate")
+    @ResponseBody
+    public ResponseData<Object> doUpdate(@RequestBody Customer customer){
+        boolean updateResult=customerService.updateById(customer);
+        if(updateResult){
+            return ResponseData.ok(null);
+        }
+        return ResponseData.failed("更新失败");
     }
 }
