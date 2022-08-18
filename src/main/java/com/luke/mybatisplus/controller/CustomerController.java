@@ -10,10 +10,8 @@ import com.luke.mybatisplus.vo.ResponseData;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,5 +46,20 @@ public class CustomerController {
         Page<Customer> myPage= customerService.page(new Page<>(page,limit),query);
 
         return ResponseUtils.buildSuccessResponseResult(myPage);
+    }
+
+    @GetMapping("/toAdd")
+    public String toAdd(){
+        return "admin/customer/customerAdd";
+    }
+
+    @PostMapping("/doAdd")
+    @ResponseBody
+    public ResponseData<Object> doAddCustomer(@RequestBody Customer customer){
+        boolean saveResult=customerService.save(customer);
+        if(saveResult){
+            return ResponseData.ok(null);
+        }
+        return ResponseData.failed("新增客户信息失败");
     }
 }
