@@ -40,21 +40,7 @@ layui.use('table', function(){
         } else if(layEvent === 'del'){ //删除
             layer.confirm('真的删除行么', function(index){
                 //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                $.ajax({
-                    url: baseURL+"/customer/doDelete/"+customerId,
-                    async:false,
-                    type:'delete',
-                    contentType:"application/json;charset=utf-8",
-                    data:JSON.stringify(data.field),
-                    success:function (res){
-                        if(res.code==0){
-                            layui.layer.closeAll();
-                            query();
-                        }else {
-                            layui.layer.alert(res.msg);
-                        }
-                    }
-                });
+                deleteData(baseURL+"/customer/doDelete/"+customerId);
                 layer.close(index);
                 //向服务端发送删除指令
             });
@@ -133,5 +119,22 @@ function submitData(filterName,requestType){
         });
         //阻止表单提交
         return false;
+    });
+}
+
+function deleteData(url){
+    $.ajax({
+        url: url,
+        async:false,
+        type:'delete',
+        contentType:"application/json;charset=utf-8",
+        success:function (res){
+            if(res.code==0){
+                layui.layer.closeAll();
+                query();
+            }else {
+                layui.layer.alert(res.msg);
+            }
+        }
     });
 }
