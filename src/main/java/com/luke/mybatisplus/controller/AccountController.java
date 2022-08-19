@@ -133,4 +133,11 @@ public class AccountController {
         }
         return ResponseData.failed("删除失败");
     }
+
+    @GetMapping("/{username}")
+    @ResponseBody
+    public ResponseData<Object> checkUsername(@PathVariable String username){
+        Long count=accountService.lambdaQuery().eq(Account::getUsername,username).count();
+        return ResponseData.ok(count);
+    }
 }

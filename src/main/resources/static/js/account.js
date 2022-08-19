@@ -58,6 +58,33 @@ layui.use('table', function(){
 
 });
 
+layui.form.verify({
+    checkUsername:function (value,item){//value:表单值，item:DOM对象
+        let errorMsg=null;
+        $.ajax({
+            url:baseURL+"/account/"+value,
+            async:false,
+            type:"get",
+            success:function (res){
+                console.log(res);
+                if(res.code==0){
+                    if(res.data>0){
+                        errorMsg="用户名已经存在";
+                    }
+                }else{
+                    errorMsg="用户名检测时出错了！！";
+                }
+            },
+            error:function (err){
+                errorMsg="用户名检测时出错了！！";
+            }
+        });
+        if(errorMsg!=null){
+            return errorMsg;
+        }
+    }
+});
+
 /**
  * 查询按钮事件
  */
