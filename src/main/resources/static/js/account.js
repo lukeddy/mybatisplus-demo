@@ -44,12 +44,12 @@ layui.use('table', function(){
         if(layEvent === 'detail'){ //查看
             openLayer(baseURL+'/account/toDetail/'+accountId,'账户详情');
         } else if(layEvent === 'del'){ //删除
-            // layer.confirm('真的删除行么', function(index){
-            //     //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-            //     deleteData(baseURL+"/customer/doDelete/"+customerId);
-            //     layer.close(index);
-            //     //向服务端发送删除指令
-            // });
+            layer.confirm('真的删除行么', function(index){
+                //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                deleteData(baseURL+"/account/doDelete/"+accountId);
+                layer.close(index);
+                //向服务端发送删除指令
+            });
         } else if(layEvent === 'edit'){ //编辑
             openLayer(baseURL+'/account/toUpdate/'+accountId,'修改账户信息');
             submitData('updateSubmit','post');
@@ -126,5 +126,26 @@ function submitData(filterName,requestType){
         });
         //阻止表单提交
         return false;
+    });
+}
+
+/**
+ * 处理删除信息Ajax封装
+ * @param url
+ */
+function deleteData(url){
+    $.ajax({
+        url: url,
+        async:false,
+        type:'delete',
+        contentType:"application/json;charset=utf-8",
+        success:function (res){
+            if(res.code==0){
+                layui.layer.closeAll();
+                query();
+            }else {
+                layui.layer.alert(res.msg);
+            }
+        }
     });
 }

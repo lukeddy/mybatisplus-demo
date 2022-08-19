@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luke.mybatisplus.dto.AccountDTO;
 import com.luke.mybatisplus.entity.Account;
-import com.luke.mybatisplus.entity.Customer;
 import com.luke.mybatisplus.entity.Role;
 import com.luke.mybatisplus.service.AccountService;
 import com.luke.mybatisplus.service.RoleService;
@@ -123,5 +122,15 @@ public class AccountController {
             return ResponseData.ok(null);
         }
         return ResponseData.failed("更新失败");
+    }
+
+    @DeleteMapping("/doDelete/{id}")
+    @ResponseBody
+    public ResponseData<Object> doDelete(@PathVariable Long id){
+        boolean delResult=accountService.removeById(id);
+        if(delResult){
+            return ResponseData.ok(null);
+        }
+        return ResponseData.failed("删除失败");
     }
 }
