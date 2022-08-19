@@ -3,6 +3,7 @@ package com.luke.mybatisplus.service;
 import com.luke.mybatisplus.entity.Resource;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.luke.mybatisplus.vo.ResourceVo;
+import com.luke.mybatisplus.vo.TreeVo;
 
 import java.util.List;
 
@@ -13,4 +14,10 @@ import java.util.List;
 */
 public interface ResourceService extends IService<Resource> {
     List<ResourceVo> getResourceByRoleId(Long roleId);
+
+    /**
+     * 查询资源列表，提供给前端使用
+     * @return
+     */
+    List<TreeVo> getResourceList();
 }

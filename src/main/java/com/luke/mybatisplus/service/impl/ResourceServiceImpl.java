@@ -1,5 +1,6 @@
 package com.luke.mybatisplus.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -8,10 +9,12 @@ import com.luke.mybatisplus.entity.Resource;
 import com.luke.mybatisplus.service.ResourceService;
 import com.luke.mybatisplus.mapper.ResourceMapper;
 import com.luke.mybatisplus.vo.ResourceVo;
+import com.luke.mybatisplus.vo.TreeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author luke
@@ -25,12 +28,15 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource>
     @Override
     public List<ResourceVo> getResourceByRoleId(Long roleId) {
         QueryWrapper<Resource> query= Wrappers.query();
-        query.eq("rr.role_id",roleId).isNull("re.parent_id");
+        query.eq("rr.role_id",roleId)
+                .isNull("re.parent_id")
+                .orderByAsc("re.sort");
         List<ResourceVo> resourceVoList=baseMapper.listResource(query);
         resourceVoList.forEach(r->{
             QueryWrapper<Resource> subQuery=Wrappers.query();
             subQuery.eq("rr.role_id",roleId)
-                    .eq("re.parent_id",r.getResourceId());
+                    .eq("re.parent_id",r.getResourceId())
+                    .orderByAsc("re.sort");
             List<ResourceVo> subResourceList=baseMapper.listResource(subQuery);
             if(CollectionUtils.isNotEmpty(subResourceList)){
                 r.setSubs(subResourceList);
@@ -38,6 +44,39 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource>
         });
 
         return resourceVoList;
+    }
+
+    @Override
+    public List<TreeVo> getResourceList() {
+        LambdaQueryWrapper<Resource> query=new LambdaQueryWrapper<>();
+        query.isNull(Resource::getParentId)
+                .orderByAsc(Resource::getSort);
+        //先获取一级资源
+       List<Resource> resourceList=list(query);
+       List<TreeVo> treeVoList= resourceList.stream().map(r->{
+            TreeVo treeVo=new TreeVo();
+            treeVo.setId(r.getResourceId());
+            treeVo.setTitle(r.getResourceName());
+
+            LambdaQueryWrapper<Resource> subQuery=new LambdaQueryWrapper();
+            subQuery.eq(Resource::getParentId,r.getResourceId())
+                    .orderByAsc(Resource::getSort);
+
+            //再根据一级资源获取二级资源
+            List<Resource> subResources=list(subQuery);
+            if(CollectionUtils.isNotEmpty(subResources)){
+             List<TreeVo> children= subResources.stream().map(sub->{
+                    TreeVo subTreeVo=new TreeVo();
+                    subTreeVo.setId(sub.getResourceId());
+                    subTreeVo.setTitle(sub.getResourceName());
+                    return subTreeVo;
+                }).collect(Collectors.toList());
+             treeVo.setChildren(children);
+            }
+            return treeVo;
+        }).collect(Collectors.toList());
+
+        return treeVoList;
     }
 }
 

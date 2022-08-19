@@ -50,7 +50,7 @@ public class AccountController {
 
     @GetMapping("/list")
     @ResponseBody
-    public ResponseData<Map<String,Object>> listCustomer(AccountDTO dto){
+    public ResponseData<Map<String,Object>> listAccount(AccountDTO dto){
         QueryWrapper<Account> query=new QueryWrapper<>();
         query.like(StringUtils.isNotBlank(dto.getRealName()),"a.real_name",dto.getRealName())
              .like(StringUtils.isNotBlank(dto.getEmail()),"a.email",dto.getEmail());
@@ -75,7 +75,7 @@ public class AccountController {
 
     @PostMapping("/doAdd")
     @ResponseBody
-    public ResponseData<Object> doAddCustomer(@RequestBody Account account){
+    public ResponseData<Object> doAddAccount(@RequestBody Account account){
         //对明文密码进行MD5加密处理
         encryptPassword(account);
         //保存数据

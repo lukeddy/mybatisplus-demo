@@ -1,10 +1,19 @@
 package com.luke.mybatisplus.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.luke.mybatisplus.entity.Role;
+import com.luke.mybatisplus.entity.RoleResource;
+import com.luke.mybatisplus.mapper.RoleResourceMapper;
+import com.luke.mybatisplus.service.RoleResourceService;
 import com.luke.mybatisplus.service.RoleService;
 import com.luke.mybatisplus.mapper.RoleMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
 * @author luke
@@ -15,6 +24,32 @@ import org.springframework.stereotype.Service;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     implements RoleService{
 
+    @Resource
+    private RoleResourceMapper roleResourceMapper;
+
+    /**
+     * 保存角色以及角色对应的资源信息
+     * @param role
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean saveRole(Role role) {
+        //保存角色信息
+        save(role);
+        //保存角色的对应资源信息
+        Long roleId=role.getRoleId();
+        List<Long> resourceIds=role.getResourceIds();
+        if(CollectionUtils.isNotEmpty(resourceIds)){
+            for(Long resourceId:resourceIds){
+                RoleResource roleResource=new RoleResource();
+                roleResource.setRoleId(roleId);
+                roleResource.setResourceId(resourceId);
+                roleResourceMapper.insert(roleResource);
+            }
+        }
+        return true;
+    }
 }
 
 

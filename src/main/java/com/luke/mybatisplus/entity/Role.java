@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -60,6 +61,12 @@ public class Role implements Serializable {
      * 逻辑删除标识(0、否 1、是)
      */
     private Integer deleted;
+
+    /**
+     * 角色对应相关资源ID
+     */
+    @TableField(exist = false)
+    private List<Long> resourceIds;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

@@ -17,18 +17,23 @@
 
 		<div class="layui-inline">
 			<div class="layui-input-inline">
-				<button class="layui-btn">查询</button>
+				<button class="layui-btn" onclick="query()">查询</button>
 			</div>
 		</div>
 
 	</div>
 
-	<button class="layui-btn">增加</button>
+	<button class="layui-btn" onclick="toAddPage()">增加</button>
 
-	<table id="roleList" lay-filter="test"></table>
+	<table id="roleList" lay-filter="roleTable"></table>
 
 	<script th:src="@{/webjars/jquery/jquery.js}"></script>
 	<script th:src="@{/webjars/layui/layui.all.js}"></script>
+	<script th:inline="javascript">
+		let baseURL= [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+		console.log(baseURL);
+	</script>
+	<script th:src="@{/js/role.js}"></script>
 	<script type="text/html" id="barDemo">
   		<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
  		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
