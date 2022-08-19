@@ -1,6 +1,9 @@
 package com.luke.mybatisplus.service.impl;
 
 import cn.hutool.crypto.digest.MD5;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.luke.mybatisplus.dto.LoginDTO;
 import com.luke.mybatisplus.entity.Account;
@@ -37,6 +40,11 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account>
       loginDTO.setPath("redirect:/dashboard");
       loginDTO.setAccount(account);
       return loginDTO;
+    }
+
+    @Override
+    public IPage<Account> getAccountList(Page<Account> page, Wrapper<Account> wrapper) {
+        return baseMapper.selectAccountList(page,wrapper);
     }
 }
 

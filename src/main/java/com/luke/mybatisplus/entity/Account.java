@@ -26,6 +26,13 @@ public class Account implements Serializable {
     private Long roleId;
 
     /**
+     * 角色名称
+     * 只用于前端展示
+     */
+    @TableField(exist = false)
+    private String roleName;
+
+    /**
      * 用户名
      */
     private String username;

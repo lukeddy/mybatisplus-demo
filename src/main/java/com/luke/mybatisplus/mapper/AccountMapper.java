@@ -1,7 +1,13 @@
 package com.luke.mybatisplus.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luke.mybatisplus.entity.Account;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.luke.mybatisplus.entity.Resource;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author luke
@@ -11,6 +17,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface AccountMapper extends BaseMapper<Account> {
 
+    /**
+     * 分页查询用户信息
+     * @param page
+     * @param wrapper
+     * @return
+     */
+    IPage<Account> selectAccountList(Page<Account> page, @Param(Constants.WRAPPER) Wrapper<Account> wrapper);
 }
 
 

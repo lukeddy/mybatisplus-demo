@@ -27,4 +27,11 @@
         modified_time,create_account_id,modified_account_id,
         deleted
     </sql>
+    <!--分页查询账号信息-->
+    <select id="selectAccountList" resultType="com.luke.mybatisplus.entity.Account">
+        select a.*,r.role_name
+            from account a inner join role r
+            on a.role_id=r.role_id
+            ${ew.customSqlSegment}
+    </select>
 </mapper>
