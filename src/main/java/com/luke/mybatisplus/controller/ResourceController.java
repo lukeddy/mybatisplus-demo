@@ -15,5 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/resource")
 public class ResourceController {
 
+    //TODO 菜单管理
 
 }
