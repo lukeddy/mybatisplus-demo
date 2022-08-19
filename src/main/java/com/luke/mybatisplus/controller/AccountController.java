@@ -11,6 +11,7 @@ import com.luke.mybatisplus.entity.Account;
 import com.luke.mybatisplus.entity.Role;
 import com.luke.mybatisplus.service.AccountService;
 import com.luke.mybatisplus.service.RoleService;
+import com.luke.mybatisplus.utils.Constant;
 import com.luke.mybatisplus.utils.ResponseUtils;
 import com.luke.mybatisplus.vo.ResponseData;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -126,7 +128,12 @@ public class AccountController {
 
     @DeleteMapping("/doDelete/{id}")
     @ResponseBody
-    public ResponseData<Object> doDelete(@PathVariable Long id){
+    public ResponseData<Object> doDelete(@PathVariable Long id, HttpSession session){
+        Account account=(Account) session.getAttribute(Constant.SESSION_KEY_LOGIN_USER);
+        if(account.getAccountId().equals(id)){
+            return ResponseData.failed("不能删除自己！！！");
+        }
+
         boolean delResult=accountService.removeById(id);
         if(delResult){
             return ResponseData.ok(null);

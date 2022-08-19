@@ -2,6 +2,7 @@ package com.luke.mybatisplus.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.luke.mybatisplus.entity.Account;
+import com.luke.mybatisplus.utils.Constant;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.format.datetime.joda.LocalDateTimeParser;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         if(metaObject.hasSetter("createAccountId")){
             //从Session中获取用户信息
             Account account= (Account) (RequestContextHolder.getRequestAttributes()
-                    .getAttribute("account", RequestAttributes.SCOPE_SESSION));
+                    .getAttribute(Constant.SESSION_KEY_LOGIN_USER, RequestAttributes.SCOPE_SESSION));
             if(null!=account){
                 this.strictInsertFill(metaObject,"createAccountId",Long.class,account.getAccountId());
             }

@@ -4,6 +4,7 @@ import com.luke.mybatisplus.dto.LoginDTO;
 import com.luke.mybatisplus.entity.Account;
 import com.luke.mybatisplus.service.AccountService;
 import com.luke.mybatisplus.service.ResourceService;
+import com.luke.mybatisplus.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class LoginController {
         String error=loginDTO.getError();
         if(error==null){
             Account account=loginDTO.getAccount();
-            session.setAttribute("account",account);
+            session.setAttribute(Constant.SESSION_KEY_LOGIN_USER,account);
             session.setAttribute("resourceVoList",resourceService.getResourceByRoleId(account.getRoleId()));
         }else{
             redirectAttributes.addFlashAttribute("error",error);
