@@ -19,10 +19,18 @@
         resource_type,url,code,
         sort
     </sql>
-    <select id="listResource" resultType="com.luke.mybatisplus.vo.ResourceVo">
+    <select id="selectResource" resultType="com.luke.mybatisplus.vo.ResourceVo">
         select re.resource_id,re.resource_name,re.url
         from resource re inner join role_resource rr
         on re.resource_id=rr.resource_id
+        ${ew.customSqlSegment}
+    </select>
+    <select id="selectResourceByRoleId" resultType="com.luke.mybatisplus.vo.TreeVo">
+        select re.resource_id id,
+               re.resource_name title,
+               if(rr.resource_id is null,false,true) checked
+        from resource re left join role_resource rr
+        on re.resource_id=rr.resource_id and rr.role_id=#{roleId}
         ${ew.customSqlSegment}
     </select>
 </mapper>

@@ -11,6 +11,7 @@ import com.luke.mybatisplus.vo.ResponseData;
 import com.luke.mybatisplus.vo.TreeVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
@@ -57,10 +58,10 @@ public class RoleController {
         return "admin/role/roleAdd";
     }
 
-    @GetMapping("/listResource")
+    @GetMapping("/listResource/{roleId}")
     @ResponseBody
-    public ResponseData<List<TreeVo>> listResource(){
-        return ResponseData.ok(resourceService.getResourceList());
+    public ResponseData<List<TreeVo>> listResource(@PathVariable(required = false)Long roleId){
+        return ResponseData.ok(resourceService.getResourceList(roleId));
     }
 
     @PostMapping("/doAdd")
@@ -72,5 +73,25 @@ public class RoleController {
         }
         return ResponseData.failed("新增角色信息失败");
     }
+
+
+
+    @GetMapping("/toUpdate/{id}")
+    public String toUpdate(@PathVariable Long id, Model model){
+        Role role=roleService.getById(id);
+        model.addAttribute("role",role);
+        return "/admin/role/roleUpdate";
+    }
+
+    @PostMapping("/doUpdate")
+    @ResponseBody
+    public ResponseData<Object> doUpdate(@RequestBody Role role){
+        boolean updateResult=roleService.updateRole(role);
+        if(updateResult){
+            return ResponseData.ok(null);
+        }
+        return ResponseData.failed("更新失败");
+    }
+
 
 }

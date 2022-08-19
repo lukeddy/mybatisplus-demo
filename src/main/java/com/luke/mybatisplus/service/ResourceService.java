@@ -19,5 +19,5 @@ public interface ResourceService extends IService<Resource> {
      * 查询资源列表，提供给前端使用
      * @return
      */
-    List<TreeVo> getResourceList();
+    List<TreeVo> getResourceList(Long roleId);
 }

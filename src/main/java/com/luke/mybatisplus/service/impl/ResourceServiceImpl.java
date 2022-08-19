@@ -31,13 +31,13 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource>
         query.eq("rr.role_id",roleId)
                 .isNull("re.parent_id")
                 .orderByAsc("re.sort");
-        List<ResourceVo> resourceVoList=baseMapper.listResource(query);
+        List<ResourceVo> resourceVoList=baseMapper.selectResource(query);
         resourceVoList.forEach(r->{
             QueryWrapper<Resource> subQuery=Wrappers.query();
             subQuery.eq("rr.role_id",roleId)
                     .eq("re.parent_id",r.getResourceId())
                     .orderByAsc("re.sort");
-            List<ResourceVo> subResourceList=baseMapper.listResource(subQuery);
+            List<ResourceVo> subResourceList=baseMapper.selectResource(subQuery);
             if(CollectionUtils.isNotEmpty(subResourceList)){
                 r.setSubs(subResourceList);
             }
@@ -47,36 +47,55 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource>
     }
 
     @Override
-    public List<TreeVo> getResourceList() {
-        LambdaQueryWrapper<Resource> query=new LambdaQueryWrapper<>();
-        query.isNull(Resource::getParentId)
-                .orderByAsc(Resource::getSort);
-        //先获取一级资源
-       List<Resource> resourceList=list(query);
-       List<TreeVo> treeVoList= resourceList.stream().map(r->{
-            TreeVo treeVo=new TreeVo();
-            treeVo.setId(r.getResourceId());
-            treeVo.setTitle(r.getResourceName());
-
-            LambdaQueryWrapper<Resource> subQuery=new LambdaQueryWrapper();
-            subQuery.eq(Resource::getParentId,r.getResourceId())
+    public List<TreeVo> getResourceList(Long roleId) {
+        if(null!=roleId){
+            QueryWrapper<Resource> query=new QueryWrapper<>();
+            query.isNull("re.parent_id")
+                    .orderByAsc("re.sort");
+            List<TreeVo> treeVoList=baseMapper.selectResourceByRoleId(query,roleId);
+            treeVoList.forEach(t->{
+                t.setChecked(false);
+                Long id=t.getId();
+                QueryWrapper<Resource> subQuery=Wrappers.query();
+                subQuery.eq("re.parent_id",id)
+                        .orderByAsc("re.sort");
+                List<TreeVo> children=baseMapper.selectResourceByRoleId(subQuery,roleId);
+                if(CollectionUtils.isNotEmpty(children)){
+                    t.setChildren(children);
+                }
+            });
+            return treeVoList;
+        }else {
+            LambdaQueryWrapper<Resource> query = new LambdaQueryWrapper<>();
+            query.isNull(Resource::getParentId)
                     .orderByAsc(Resource::getSort);
+            //先获取一级资源
+            List<Resource> resourceList = list(query);
+            List<TreeVo> treeVoList = resourceList.stream().map(r -> {
+                TreeVo treeVo = new TreeVo();
+                treeVo.setId(r.getResourceId());
+                treeVo.setTitle(r.getResourceName());
 
-            //再根据一级资源获取二级资源
-            List<Resource> subResources=list(subQuery);
-            if(CollectionUtils.isNotEmpty(subResources)){
-             List<TreeVo> children= subResources.stream().map(sub->{
-                    TreeVo subTreeVo=new TreeVo();
-                    subTreeVo.setId(sub.getResourceId());
-                    subTreeVo.setTitle(sub.getResourceName());
-                    return subTreeVo;
-                }).collect(Collectors.toList());
-             treeVo.setChildren(children);
-            }
-            return treeVo;
-        }).collect(Collectors.toList());
+                LambdaQueryWrapper<Resource> subQuery = new LambdaQueryWrapper();
+                subQuery.eq(Resource::getParentId, r.getResourceId())
+                        .orderByAsc(Resource::getSort);
 
-        return treeVoList;
+                //再根据一级资源获取二级资源
+                List<Resource> subResources = list(subQuery);
+                if (CollectionUtils.isNotEmpty(subResources)) {
+                    List<TreeVo> children = subResources.stream().map(sub -> {
+                        TreeVo subTreeVo = new TreeVo();
+                        subTreeVo.setId(sub.getResourceId());
+                        subTreeVo.setTitle(sub.getResourceName());
+                        return subTreeVo;
+                    }).collect(Collectors.toList());
+                    treeVo.setChildren(children);
+                }
+                return treeVo;
+            }).collect(Collectors.toList());
+
+            return treeVoList;
+        }
     }
 }
 

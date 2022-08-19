@@ -26,28 +26,30 @@ layui.use('table', function(){
     });
 
     //工具条事件
-    // table.on('tool(roleTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
-    //     console.log(obj);
-    //     let data = obj.data; //获得当前行数据
-    //     let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-    //     let tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
-    //     let customerId=data.customerId;
-    //
-    //
-    //     if(layEvent === 'detail'){ //查看
-    //         openLayer(baseURL+'/customer/toDetail/'+customerId,'客户详情');
-    //     } else if(layEvent === 'del'){ //删除
-    //         layer.confirm('真的删除行么', function(index){
-    //             //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-    //             deleteData(baseURL+"/customer/doDelete/"+customerId);
-    //             layer.close(index);
-    //             //向服务端发送删除指令
-    //         });
-    //     } else if(layEvent === 'edit'){ //编辑
-    //         openLayer(baseURL+'/customer/toUpdate/'+customerId,'修改客户信息');
-    //         submitData('updateSubmit','post');
-    //     }
-    // });
+    table.on('tool(roleTable)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+        //console.log(obj);
+        let data = obj.data; //获得当前行数据
+        let layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        let tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+        let roleId=data.roleId;
+
+
+        if(layEvent === 'detail'){ //查看
+            // openLayer(baseURL+'/role/toDetail/'+roleId,'角色详情');
+        } else if(layEvent === 'del'){ //删除
+            // layer.confirm('真的删除行么', function(index){
+            //     //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+            //     deleteData(baseURL+"/role/doDelete/"+roleId);
+            //     layer.close(index);
+            //     //向服务端发送删除指令
+            // });
+        } else if(layEvent === 'edit'){ //编辑
+            openLayer(baseURL+'/role/toUpdate/'+roleId,'修改角色信息');
+            //初始化树形组件
+            initTree(baseURL+'/role/listResource/'+roleId,'resource');
+            submitData('updateSubmit','post',handleSelectedTreeIds);
+        }
+    });
 
 });
 

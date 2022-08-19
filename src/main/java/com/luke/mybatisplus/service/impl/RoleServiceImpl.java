@@ -1,6 +1,7 @@
 package com.luke.mybatisplus.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.luke.mybatisplus.entity.Role;
 import com.luke.mybatisplus.entity.RoleResource;
@@ -39,6 +40,28 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
         save(role);
         //保存角色的对应资源信息
         Long roleId=role.getRoleId();
+        List<Long> resourceIds=role.getResourceIds();
+        if(CollectionUtils.isNotEmpty(resourceIds)){
+            for(Long resourceId:resourceIds){
+                RoleResource roleResource=new RoleResource();
+                roleResource.setRoleId(roleId);
+                roleResource.setResourceId(resourceId);
+                roleResourceMapper.insert(roleResource);
+            }
+        }
+        return true;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean updateRole(Role role) {
+        updateById(role);
+        Long roleId=role.getRoleId();
+        //先删除角色资源关系
+        roleResourceMapper.delete(Wrappers
+                .<RoleResource>lambdaQuery()
+                .eq(RoleResource::getRoleId,roleId));
+        //再新增角色资源关系
         List<Long> resourceIds=role.getResourceIds();
         if(CollectionUtils.isNotEmpty(resourceIds)){
             for(Long resourceId:resourceIds){
