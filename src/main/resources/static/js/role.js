@@ -71,24 +71,33 @@ function query(){
 function toAddPage(){
     openLayer(baseURL+'/role/toAdd','新增角色');
     //初始化树形组件
+    initTree(baseURL+'/role/listResource','resource');
+
+    submitData('addSubmit','post',handleSelectedTreeIds);
+}
+
+/**
+ * 树封装
+ * @param url
+ * @param elemId
+ */
+function initTree(url,elemId){
     $.ajax({
-        url: baseURL+'/role/listResource',
+        url: url,
         async:false,
         type:"get",
         success:function (res){
-          //console.log(res);
-          if(res.code==0){
-              layui.tree.render({
-                  elem:'#resource',
-                  data:res.data,
-                  id:'resource',
-                  showCheckbox:true
-              })
-          }
+            //console.log(res);
+            if(res.code==0){
+                layui.tree.render({
+                    elem:'#'+elemId,
+                    data:res.data,
+                    id:elemId,
+                    showCheckbox:true
+                })
+            }
         }
     });
-
-    submitData('addSubmit','post',handleSelectedTreeIds);
 }
 
 /**
