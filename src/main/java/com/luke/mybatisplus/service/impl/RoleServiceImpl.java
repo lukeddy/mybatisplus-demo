@@ -73,6 +73,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
         }
         return true;
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean removeRole(Long roleId) {
+        //先删除角色资源关系
+        roleResourceMapper.delete(Wrappers
+                .<RoleResource>lambdaQuery()
+                .eq(RoleResource::getRoleId,roleId));
+        //再删除角色本身
+        baseMapper.deleteById(roleId);
+        return true;
+    }
 }
 
 

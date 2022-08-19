@@ -108,7 +108,7 @@ public class RoleController {
             return ResponseData.failed("有账号正在使用该角色，禁止删除！！！");
         }
         //TODO 删除对应角色再角色资源表中的记录
-        boolean delResult=roleService.removeById(id);
+        boolean delResult=roleService.removeRole(id);
         if(delResult){
             return ResponseData.ok(null);
         }

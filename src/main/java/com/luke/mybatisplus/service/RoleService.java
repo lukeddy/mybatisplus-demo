@@ -18,4 +18,11 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     boolean updateRole(Role role);
+
+    /**
+     * 根据角色ID删除角色
+     * @param roleId
+     * @return
+     */
+    boolean removeRole(Long roleId);
 }
