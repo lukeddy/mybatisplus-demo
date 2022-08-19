@@ -34,4 +34,10 @@
             on a.role_id=r.role_id
             ${ew.customSqlSegment}
     </select>
+    <select id="selectAccountById" resultType="com.luke.mybatisplus.entity.Account">
+        select a.*,r.role_name
+            from account a inner join role r
+            on a.role_id=r.role_id
+            where a.account_id = #{id}
+    </select>
 </mapper>

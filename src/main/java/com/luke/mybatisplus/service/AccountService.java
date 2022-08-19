@@ -16,4 +16,6 @@ public interface AccountService extends IService<Account> {
    LoginDTO login(String username, String password);
 
    IPage<Account> getAccountList(Page<Account> page, Wrapper<Account> wrapper);
+
+   Account getAccountById(Long id);
 }

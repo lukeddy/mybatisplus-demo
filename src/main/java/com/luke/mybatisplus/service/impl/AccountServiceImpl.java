@@ -46,6 +46,11 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account>
     public IPage<Account> getAccountList(Page<Account> page, Wrapper<Account> wrapper) {
         return baseMapper.selectAccountList(page,wrapper);
     }
+
+    @Override
+    public Account getAccountById(Long id) {
+        return baseMapper.selectAccountById(id);
+    }
 }
 
 

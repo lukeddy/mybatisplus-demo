@@ -24,6 +24,13 @@ public interface AccountMapper extends BaseMapper<Account> {
      * @return
      */
     IPage<Account> selectAccountList(Page<Account> page, @Param(Constants.WRAPPER) Wrapper<Account> wrapper);
+
+    /**
+     * 根据账户ID查询信息
+     * @param id
+     * @return
+     */
+    Account selectAccountById(Long id);
 }
 
 

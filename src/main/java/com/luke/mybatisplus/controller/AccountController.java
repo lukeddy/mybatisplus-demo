@@ -95,7 +95,7 @@ public class AccountController {
 
     @GetMapping("/toDetail/{id}")
     public String toDetail(@PathVariable Long id, Model model){
-        Account account=accountService.getById(id);
+        Account account=accountService.getAccountById(id);
         model.addAttribute("account",account);
         return "/admin/account/accountDetail";
     }
