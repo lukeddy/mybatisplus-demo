@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.luke.mybatisplus.vo.ResourceVo;
 import com.luke.mybatisplus.vo.TreeVo;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -20,4 +21,6 @@ public interface ResourceService extends IService<Resource> {
      * @return
      */
     List<TreeVo> getResourceList(Long roleId);
+
+    HashSet<String> convert(List<ResourceVo> resourceVoList);
 }
