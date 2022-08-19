@@ -61,8 +61,14 @@ layui.use('table', function(){
 layui.form.verify({
     checkUsername:function (value,item){//value:表单值，item:DOM对象
         let errorMsg=null;
+        let url=baseURL+"/account/"+value;
+        //如果是修改页
+        let accountId=$("input[name='accountId']").val();
+        if(typeof (accountId)!='undefined'){
+            url+='/'+accountId;
+        }
         $.ajax({
-            url:baseURL+"/account/"+value,
+            url: url,
             async:false,
             type:"get",
             success:function (res){
@@ -80,6 +86,8 @@ layui.form.verify({
             }
         });
         if(errorMsg!=null){
+            console.log(errorMsg);
+            //alert(errorMsg);
             return errorMsg;
         }
     }

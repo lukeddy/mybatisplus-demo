@@ -134,10 +134,15 @@ public class AccountController {
         return ResponseData.failed("删除失败");
     }
 
-    @GetMapping("/{username}")
+    @GetMapping({"/{username}","/{username}/{accountId}"})
     @ResponseBody
-    public ResponseData<Object> checkUsername(@PathVariable String username){
-        Long count=accountService.lambdaQuery().eq(Account::getUsername,username).count();
+    public ResponseData<Object> checkUsername(@PathVariable String username,
+                                              @PathVariable(required = false)Long accountId){
+
+        Long count=accountService.lambdaQuery()
+                .eq(Account::getUsername,username)
+                .ne(accountId!=null,Account::getAccountId,accountId)
+                .count();
         return ResponseData.ok(count);
     }
 }
