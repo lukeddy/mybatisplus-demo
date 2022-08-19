@@ -35,7 +35,8 @@ layui.use('table', function(){
 
 
         if(layEvent === 'detail'){ //查看
-            // openLayer(baseURL+'/role/toDetail/'+roleId,'角色详情');
+            openLayer(baseURL+'/role/toDetail/'+roleId,'角色详情');
+            initTree(baseURL+'/role/listResource/'+roleId,'resource');
         } else if(layEvent === 'del'){ //删除
             layer.confirm('真的删除行么', function(index){
                 //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
@@ -83,7 +84,10 @@ function toAddPage(){
  * @param url
  * @param elemId
  */
-function initTree(url,elemId){
+function initTree(url,elemId,showCheckbox){
+    if(typeof (showCheckbox)=='undefined'){
+        showCheckbox=true;
+    }
     $.ajax({
         url: url,
         async:false,
@@ -95,7 +99,7 @@ function initTree(url,elemId){
                     elem:'#'+elemId,
                     data:res.data,
                     id:elemId,
-                    showCheckbox:true
+                    showCheckbox:showCheckbox
                 })
             }
         }

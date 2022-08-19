@@ -79,7 +79,12 @@ public class RoleController {
         return ResponseData.failed("新增角色信息失败");
     }
 
-
+    @GetMapping("/toDetail/{id}")
+    public String toDetail(@PathVariable Long id, Model model){
+        Role role=roleService.getById(id);
+        model.addAttribute("role",role);
+        return "/admin/role/roleDetail";
+    }
 
     @GetMapping("/toUpdate/{id}")
     public String toUpdate(@PathVariable Long id, Model model){

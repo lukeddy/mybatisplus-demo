@@ -5,17 +5,17 @@
 <link rel="stylesheet" th:href="@{/webjars/layui/css/layui.css}">
 </head>
 <body>
-	<div class="layui-form">
+	<div class="layui-form" th:object="${role}">
 		<div class="layui-form-item">
 			<label class="layui-form-label">角色名称</label>
 			<div class="layui-input-block">
-				<div class="layui-form-mid"></div>
+				<div class="layui-form-mid" th:text="*{roleName}"></div>
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">备注</label>
 			<div class="layui-input-block">
-				<div class="layui-form-mid"></div>
+				<div class="layui-form-mid" th:text="*{remark}"></div>
 			</div>
 		</div>
 		<div class="layui-form-item">
