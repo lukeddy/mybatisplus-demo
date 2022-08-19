@@ -27,6 +27,11 @@ public class LoginController {
     @Autowired
     private ResourceService resourceService;
 
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login";
+    }
+
     @PostMapping("/login")
     public String login(String username, String password, HttpSession session, RedirectAttributes redirectAttributes){
         LoginDTO loginDTO=accountService.login(username,password);
