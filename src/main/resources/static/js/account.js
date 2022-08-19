@@ -73,3 +73,58 @@ function query(){
         }
     })
 }
+
+/**
+ * 跳转到新增页面
+ */
+function toAddPage(){
+    openLayer(baseURL+'/account/toAdd','新增账户信息');
+    submitData('addSubmit','post');
+}
+
+/**
+ * 打开弹出成层封装
+ * @param url
+ * @param title
+ */
+function openLayer(url,title){
+    $.ajaxSettings.async=false;
+    $.get(url,function (pageContent) {
+        layui.layer.open({
+            type: 1,
+            title: title,
+            area: ['800px', '450px'],
+            content: pageContent
+        });
+    });
+    $.ajaxSettings.async=true;
+}
+
+/**
+ * 处理表单提交封装
+ * @param filterName
+ * @param requestType
+ */
+function submitData(filterName,requestType){
+    layui.form.render();
+    layui.form.on('submit('+filterName+')',function (data){
+        console.log(data);
+        $.ajax({
+            url: data.form.action,
+            async:false,
+            type:requestType,
+            contentType:"application/json;charset=utf-8",
+            data:JSON.stringify(data.field),
+            success:function (res){
+                if(res.code==0){
+                    layui.layer.closeAll();
+                    query();
+                }else {
+                    layui.layer.alert(res.msg);
+                }
+            }
+        });
+        //阻止表单提交
+        return false;
+    });
+}

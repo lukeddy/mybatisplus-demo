@@ -1,22 +1,25 @@
 package com.luke.mybatisplus.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.hutool.core.lang.UUID;
+import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luke.mybatisplus.dto.AccountDTO;
 import com.luke.mybatisplus.entity.Account;
+import com.luke.mybatisplus.entity.Role;
 import com.luke.mybatisplus.service.AccountService;
+import com.luke.mybatisplus.service.RoleService;
 import com.luke.mybatisplus.utils.ResponseUtils;
 import com.luke.mybatisplus.vo.ResponseData;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +36,11 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private RoleService roleService;
+
+
     @GetMapping("/toList")
     public String toList(){
         return "admin/account/accountList";
@@ -54,5 +62,31 @@ public class AccountController {
 
         IPage<Account> myPage=accountService.getAccountList(new Page(dto.getPage(),dto.getLimit()),query);
         return ResponseUtils.buildSuccessResponseResult(myPage);
+    }
+
+    @GetMapping("/toAdd")
+    public String toAdd(Model model){
+       List<Role> roleList= roleService.list(Wrappers.<Role>lambdaQuery().orderByAsc(Role::getRoleId));
+       model.addAttribute("roles",roleList);
+       return "admin/account/accountAdd";
+    }
+
+    @PostMapping("/doAdd")
+    @ResponseBody
+    public ResponseData<Object> doAddCustomer(@RequestBody Account account){
+        //对明文密码进行MD5加密处理
+        String password=account.getPassword();
+        String salt= UUID.fastUUID().toString().replaceAll("-","");
+        MD5 md5=new MD5(salt.getBytes());
+        String encryptedPwd= md5.digestHex(password);
+        account.setSalt(salt);
+        account.setPassword(encryptedPwd);
+
+        //保存数据
+        boolean saveResult=accountService.save(account);
+        if(saveResult){
+            return ResponseData.ok(null);
+        }
+        return ResponseData.failed("新增账户信息失败");
     }
 }
