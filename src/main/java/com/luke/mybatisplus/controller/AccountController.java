@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luke.mybatisplus.dto.AccountDTO;
 import com.luke.mybatisplus.entity.Account;
+import com.luke.mybatisplus.entity.Customer;
 import com.luke.mybatisplus.entity.Role;
 import com.luke.mybatisplus.service.AccountService;
 import com.luke.mybatisplus.service.RoleService;
@@ -75,18 +76,52 @@ public class AccountController {
     @ResponseBody
     public ResponseData<Object> doAddCustomer(@RequestBody Account account){
         //对明文密码进行MD5加密处理
-        String password=account.getPassword();
-        String salt= UUID.fastUUID().toString().replaceAll("-","");
-        MD5 md5=new MD5(salt.getBytes());
-        String encryptedPwd= md5.digestHex(password);
-        account.setSalt(salt);
-        account.setPassword(encryptedPwd);
-
+        encryptPassword(account);
         //保存数据
         boolean saveResult=accountService.save(account);
         if(saveResult){
             return ResponseData.ok(null);
         }
         return ResponseData.failed("新增账户信息失败");
+    }
+
+    private void encryptPassword(Account account){
+        String password=account.getPassword();
+        String salt= UUID.fastUUID().toString().replaceAll("-","");
+        MD5 md5=new MD5(salt.getBytes());
+        String encryptedPwd= md5.digestHex(password);
+        account.setSalt(salt);
+        account.setPassword(encryptedPwd);
+    }
+
+    @GetMapping("/toDetail/{id}")
+    public String toDetail(@PathVariable Long id, Model model){
+        Account account=accountService.getById(id);
+        model.addAttribute("account",account);
+        return "/admin/account/accountDetail";
+    }
+
+    @GetMapping("/toUpdate/{id}")
+    public String toUpdate(@PathVariable Long id, Model model){
+        Account account=accountService.getById(id);
+        List<Role> roleList= roleService.list(Wrappers.<Role>lambdaQuery().orderByAsc(Role::getRoleId));
+        model.addAttribute("roles",roleList);
+        model.addAttribute("account",account);
+        return "/admin/account/accountUpdate";
+    }
+
+    @PostMapping("/doUpdate")
+    @ResponseBody
+    public ResponseData<Object> doUpdate(@RequestBody Account account){
+        if(StringUtils.isNotBlank(account.getPassword())){
+            encryptPassword(account);
+        }else{
+            account.setPassword(null);
+        }
+        boolean updateResult=accountService.updateById(account);
+        if(updateResult){
+            return ResponseData.ok(null);
+        }
+        return ResponseData.failed("更新失败");
     }
 }
